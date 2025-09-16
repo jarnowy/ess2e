@@ -1,0 +1,55 @@
+\documentclass[a4paper]{report}
+
+\usepackage{makeidx}
+
+\newcommand\Aut{\mathop{\mathrm{Aut}}\nolimits}
+
+% index of notation
+\def\glossaryentry#1#2{\item #1, #2}
+\makeatletter
+\def\printnotation{{%
+\def\indexname{Index of notation}
+\begin{theindex}
+\@input{\jobname.ntn}
+\end{theindex}
+}}
+\makeatother
+
+\makeglossary
+
+\title{Making an index of notation}
+\author{Richard Kaye}
+\date{12th August 1998}
+
+\begin{document}
+\maketitle
+\chapter{Making an index of notation}
+
+This document uses the \texttt{makeidx} package to generate an index
+of notation, ordered in the order of appearance in the book or report.
+(This is the order I would recommend anyway!)  
+
+To generate the finished \texttt{dvi} file do
+\begin{verbatim}
+latex testntn
+cp testntn.glo testntn.ntn
+latex testntn
+\end{verbatim}
+(The UNIX \texttt{cp} command simply copies one file onto another.  Under
+other systems use some alternative command.)
+
+That's all there is to it!
+
+If you really want to change the order of entries in your index of 
+notation, you'll have to do that somehow yourself. (Replace the 
+\texttt{cp} command with something else that
+generates a \texttt{.ntn} file from a \texttt{.glo} file.)  You can of
+course do this by hand in an editor and then do `save as'.
+
+This is a test: $M_{22}.$\glossary{$M_{22},M_{23},M_{24},\Aut M_{22}$}
+Testing testing 123\ldots More testing.\glossary{123}
+
+\printnotation
+
+\end{document}
+

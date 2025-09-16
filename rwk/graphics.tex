@@ -1,0 +1,153 @@
+\documentclass[a4paper]{article}
+
+\usepackage{graphicx}
+
+\title{Using encapsulated postscript graphics}
+\author{Richard Kaye}
+\date{22nd October 1999}
+
+\newcommand\cn[1]{$\mathtt\backslash$\texttt{#1}}
+
+\begin{document}
+
+\maketitle
+\section{Introduction}
+
+There are two standard graphics packages for \LaTeX,
+\verb|graphics| and \verb|graphicx|.  My preference is
+for the \verb|graphicx| package, and this is the one used 
+in this document.  However, all the features mentioned
+here are available from either package.
+
+The \verb|graphicx| package extends \LaTeX's
+capabilities by allowing you to use other special features 
+of the program you use to print dvi files (called the 
+`driver').  A large number of drivers (printing programs,
+viewers, etc.)~are catered for. With the right
+driver it is possible to incorporate bitmap images (in a wide
+variety of formats) into your document.  In this department,
+we generally use the \verb|dvips| driver, 
+which converts a dvi file to postscript.
+Images can be incorporated easily if they are in 
+\textit{encapsulated postscript}~(eps) format.
+This usually provides the
+quickest way to incorporated complex diagrams in a text.
+Also, if you use \verb|dvips|, the graphics package provides other
+postscript commands to be used.  
+
+Before you use it you should be aware that, although some
+effort has been made to ensure the commands in the package
+work at other installations of \LaTeX, not all of them do,
+and some of them are quite specific to the particular
+driver, \verb|dvips|.  Therefore, it is not guarenteed that
+if you email a \LaTeX\ document prepared this way to a 
+colleague elsewhere that you document will appear as you 
+intend it when it is printed.  In other words, incorporation
+of graphics might compromise one of the advantages of using
+\LaTeX---its portability.
+
+There are many commands in the package.  I will just mention
+the most commonly used ones here.  For more information, see the
+documentation or ask me.
+
+As always, you need to load the package:
+\begin{verbatim}
+\usepackage{graphicx}
+\end{verbatim}
+or
+\begin{verbatim}
+\usepackage[dvips]{graphicx}
+\end{verbatim}
+to specify the driver you intend to use (if this is not default on your
+system).
+
+You can include a picture as follows.
+\begin{verbatim}
+\begin{center}
+\fbox{\includegraphics{ubhamlet.eps}}
+\end{center}
+\end{verbatim}
+
+This gives the following output.
+\begin{center}
+\fbox{\includegraphics{ubhamlet.eps}}
+\end{center}
+
+Here, the \verb|\fbox| produces the lines round the box,
+you do not need this if you don't want it.  The explicit
+\verb|center|ing is necessary.
+
+There are two things to remember:
+\begin{enumerate}
+\item The \verb|\includegraphics| command produces a `box'---like 
+a character from an alphabet.  You have to position it yourself.
+\item For \verb|dvips|, the graphics file to be read in (\verb|ubhamlet.eps|) 
+here should be an \textit{encpsulated postscript file}.  An ordinary
+postscript file doesn't work.  Most image tools can save their
+output as eps, and maple output and graphs can also be saved as eps.
+\end{enumerate}
+
+The \verb|graphicx| package provides commands to scale,
+rotate and reflect boxes.
+
+\begin{verbatim}
+\rotatebox{30}{Rotated} text. 
+Scaled figure: \scalebox{0.1}{\includegraphics{ubhamlet.eps}}
+\end{verbatim}
+gives
+\begin{center}
+\rotatebox{30}{Rotated} text. 
+Scaled figure: \scalebox{0.1}{\includegraphics{ubhamlet.eps}}
+\end{center}
+where the rotation takes place about the box's \textit{reference point}
+(usually the bottom left corner), and the scaling changes the size---here
+to a tenth (0.1) of the original size.
+Also,
+\begin{verbatim}
+Scaled figure: \scalebox{0.2}[0.3]{\includegraphics{ubhamlet.eps}}
+\end{verbatim}
+gives
+\begin{center}
+Scaled figure: \scalebox{0.2}[0.3]{\includegraphics{ubhamlet.eps}}
+\end{center}
+The second optional argument to \verb|\scalebox| is a separate scaling
+for the vertical dimension---here to 0.3 of the original vertical
+dimension.
+
+There's also a command to scale a figure to a given size.  The following
+makes the figure exactly 1~inches wide:
+\begin{verbatim}
+Resized figure: \resizebox{1in}{!}{\includegraphics{ubhamlet.eps}}
+\end{verbatim}
+gives
+\begin{center}
+Resized figure: \resizebox{1in}{!}{\includegraphics{ubhamlet.eps}}
+\end{center}
+
+A vertical dimension, e.g., \verb|2in|, can replace `!', so
+\begin{verbatim}
+\resizebox{3in}{2in}{\includegraphics{ubhamlet.eps}}
+\end{verbatim}
+would make the figure 3~inches wide and 2~inches high.
+The `!' is used in place of the vertical dimension to ensure
+that the figure is rescaled by the same factor in both directions.
+If you wish, you can use `!' for the horizontal dimension
+and specify the vertical one instead.
+You may also use \verb|\height|, or \verb|\width| to indicate
+the original height or width of the box, as
+in
+\begin{verbatim}
+\resizebox{1cm}{\height}{\includegraphics{ubhamlet.eps}}
+\end{verbatim}
+which prints the box at its usual height but with a width of 1cm.
+
+There are many other options for graphics in the 
+\verb|graphicx| package.  The full documentation is in the file
+\verb|grfguide.tex|, and can be obtained by 
+running \LaTeX{} \textit{three times} and then 
+printing (with \verb|dvips|!) as usual. 
+
+There are also many many other tricks that can be obtained
+using postscript. In all cases, please use them with care and taste!
+
+\end{document}

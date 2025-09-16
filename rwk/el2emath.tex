@@ -1,0 +1,667 @@
+% This is a supplement to:
+
+% Essential LaTeX - Jon Warbrick 02/88
+%                 - W T Hewitt, MCC CGU August 1989
+
+% giving a brief overview of mathematical typesetting using LaTeX
+%                      D. P. Carlisle 22/9/89
+
+% modified by Richard Kaye for LaTeX2e
+
+% I reproduce here the copyright notice from Essential LaTeX, the same
+% conditions apply to this document.
+
+%   Permission is granted to reproduce the document in any way providing
+%   that it is distributed for free, except for any reasonable charges for
+%   printing, distribution, staff time, etc.  Direct commercial
+%   exploitation is not permitted.  Extracts may be made from this
+%   document providing an acknowledgement of the original source is
+%   maintained.
+
+
+\documentclass[a4paper]{article}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+% 
+\newcounter{savesection}
+\newcounter{savesubsection}
+
+% commands to do 'LaTeX Manual-like' examples
+
+\newlength{\egwidth}\setlength{\egwidth}{0.45\textwidth}
+
+\newenvironment{eg}%
+{\begin{list}{}{\setlength{\leftmargin}{0pt}%
+\setlength{\rightmargin}{\leftmargin}}\item[]\footnotesize}%
+{\end{list}}
+
+% AmsTeX logo
+\newcommand{\AmsTeX}{{$\cal A$}\kern-.1667em\lower.5ex\hbox
+{$\cal M$}\kern-.125em{$\cal S$}-\TeX}
+\newcommand{\AmsLaTeX}{{$\cal A$}\kern-.1667em\lower.5ex\hbox
+{$\cal M$}\kern-.125em{$\cal S$}-\LaTeX}
+%
+\newenvironment{egbox}%
+{\begin{minipage}[t]{\egwidth}}%
+{\end{minipage}}
+
+\newcommand{\egstart}{\begin{eg}\begin{egbox}}
+\newcommand{\egmid}{\end{egbox}\hfill\begin{egbox}}
+\newcommand{\egend}{\end{egbox}\end{eg}}
+
+% one or two other commands
+
+\newcommand{\fn}[1]{\hbox{\tt #1}}
+\newcommand{\llo}[1]{(see line #1)}
+\newcommand{\lls}[1]{(see lines #1)}
+\newcommand{\bs}{$\backslash$}
+
+\title{Essential Mathematical \LaTeXe}
+\author{D. P. Carlisle \and Richard Kaye}
+\date{12th August 1998}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+This document is a supplement to ``Essential \LaTeXe'', describing
+basic mathematical typesetting in \LaTeXe. It makes no attempt at 
+completeness so if in doubt {\bf read the manual}.
+
+\section{Math, Display-math and Equation}
+Mathematics is treated by \LaTeX\  completely differently from ordinary text.
+There are two special {\em modes\/} for mathematics, {\em math mode\/}
+and {\em display math mode}.
+
+Math mode commands are surrounded by \verb|\(| and \verb|\)|.
+\egstart
+Some mathematics set inline \( 2\times 3 =   6 \).
+Note that spaces in the input file are ignored in math mode.
+\egmid
+\begin{verbatim}
+... set inline \( 2\times 3 =   6 \).
+Note that spaces ...
+\end{verbatim}
+\egend
+
+Display math mode commands are surrounded by \verb|\[| and \verb|\]|.
+\egstart
+A larger equation to be displayed on a line by itself.
+\[ f(x) = \sum_{i=0}^{\infty}\frac{f^{(i)}(x)}{i!} \]
+\egmid
+\begin{verbatim}
+... to be displayed on a line by itself.
+\[ f(x) = 
+ \sum_{i=0}^{\infty}\frac{f^{(i)}(x)}{i!} \]
+\end{verbatim}
+\egend
+
+There is a variant of Display math mode, the equation environment
+which automatically generates an equation number.
+
+\egstart
+\begin{equation}
+\left(\begin{array}{cc}
+1 & 2 \\0 & 1
+\end{array}\right)
+\left(\begin{array}{cc}
+2 & 0\\1 & 3
+\end{array}\right)
+=
+\left(\begin{array}{cc}
+4 & 6 \\1 & 3
+\end{array}\right)
+\end{equation}
+\egmid
+\begin{verbatim}
+\begin{equation}
+\left(\begin{array}{cc}
+1 & 2 \\0 & 1
+\end{array}\right)
+\left(\begin{array}{cc}
+2 & 0\\1 & 3
+\end{array}\right)
+=
+\left(\begin{array}{cc}
+4 & 6 \\1 & 3
+\end{array}\right)
+\end{equation}
+\end{verbatim}
+\egend
+
+The short examples above show the main types of commands available 
+in math mode.
+\begin{enumerate}
+\item Subscripts and superscripts are produced with \verb|_| and \verb|^|, as in
+      \verb|x_{1} = p^{2}| \(x_{1} = p^{2}\). 
+\item Fractions are produced by the \verb|\frac| command. 
+      \verb|\(\frac{a + b}{c}\)| \(\frac{a + b}{c}\).
+\item Various commands give names to mathematical symbols.\\
+      \verb| \infty \Rightarrow \surd \bigotimes | 
+      \(\infty\;\Rightarrow\;\surd\;\bigotimes\)
+\item Arrays are produced by the array environment. This is identical
+      to the tabular environment described in {\em essential \LaTeX\/}
+      except that the entries are typeset in math mode instead of LR mode.
+      Note that the array environment does not put brackets arround the array
+      so it can also be used for setting determinants, or even 
+      sets of equations in which you want the columns to line up.
+\item The commands \verb|\left| and \verb|\right| produce delimiters which
+      grow as large as needed, they can be used with a variety of symbols,
+      e.g., \verb|\left(|, \verb|\left\{|, \verb!\left|!. The full set of 
+      these delimiters is shown in Table \ref{dels} below.  There are
+      some things to note: 
+      \begin{enumerate}
+      \item \verb|\left| and \verb|\right| must come in matching
+      pairs, otherwise \LaTeX\ won't know what formula the delimiter
+      must be adjusted to fit round; 
+      \item you must remember to put a delimiter after \verb|\left| 
+      and \verb|\right|; 
+      \item the delimiters themselves needn't be matched, so 
+      \verb|\( \left( ... \right] \)|
+      is OK; 
+      \item if you \textit{really} don't want any delimiter on
+      one side, use `.' in place of a delimiter, as in 
+      \verb|\( \left\{ ... \right. \)| (which is often used for definitions
+      by cases).
+      \end{enumerate}
+\end{enumerate}
+
+\section{Spacing}
+All spaces in the input file are ignored in math mode. Sometimes
+you may want to adjust the spacing. Use one of the following commands
+or an explicit \verb|\hspace|.
+\begin{center}
+\begin{tabular}{ll}
+\verb|\,| thin space          &\verb|\:| medium space \\
+\verb|\!| negative thin space &\verb|\;| thick space \\
+\end{tabular}
+\end{center}
+
+A good example of where \LaTeX\ needs some help with spacing is
+\egstart
+$\int\!\!\int z\, dx dy$ \ instead of $\int\int z dx dy$
+\egmid
+\verb|\int\!\!\int z\, dx dy .. \int\int z dx dy|.
+\egend
+
+\section{Changing fonts in math mode}
+The default math mode font is $math\ italic$. This should not be
+confused with ordinary {\em text italic}.  The letters are
+a slightly different shape, and the spacing between them is 
+quite different.
+The font for `ordinary' letters can be changed with the 
+commands, \verb|\mathbf|, \verb|\mathrm|, \verb|\mathit|,
+\verb|\mathsf|, and \verb|\mathnormal|.
+These commands take a single argument---the letters that
+should be bold or roman or whatever.
+Note that lower case Greek letters
+are just regarded as mathematical symbols, \verb|\alpha| etc, and are
+not affected by these commands.
+
+\verb|\bf| produces {\bf bold face roman} letters. If you wish
+to have {\boldmath $bold$ $face$ $math$ $italic$} letters, and bold face 
+Greek letters and mathematical symbols, use the \verb|\boldmath| command
+{\em before\/} going into math mode. 
+This changes the default math fonts to bold.
+
+\egstart{\normalsize
+\( x = 2\pi \Rightarrow x \simeq 6.28 \)\\
+\(\mathbf{ x = 2\pi \Rightarrow x \simeq 6.28 } \)\\\mbox{}\\
+\boldmath
+\( x = 2\pi \Rightarrow x \simeq 6.28 \)}
+\egmid
+\begin{verbatim}
+\( x = 2\pi \Rightarrow x \simeq 6.28 \)
+\(\mathbf{ x = 2\pi \Rightarrow x \simeq 6.28 } \)
+\boldmath
+\( x = 2\pi \Rightarrow x \simeq 6.28 \)
+\end{verbatim}
+\egend
+
+There is also a calligraphic font for upper case letters
+produced by the \verb|\mathcal| command.
+
+\egstart
+\( \mathcal{F}\mathcal{G} \)
+\egmid
+\verb|\( \mathcal{F}\mathcal{G} \)|
+\egend
+
+\AmsLaTeX\ provides more commands for bold-face mathematics, so that
+bold math italic and ordinary math fonts can be mixed in the same
+formula without using \verb|\boldmath|, and it also adds `blackboard bold'
+characters (\verb|\mathbb|), $\mathbb{NZQRC}$, 
+`script', and `fraktur' fonts (\verb|\mathfrak|). $\mathfrak{ABCDEFG}$.  
+(RK adds: I'm not very fond of the AMS's script
+font though.  I much prefer the oldfashioned copper-plate letters
+which are available in the `mathrsfs' package, and which gives---using the
+\verb|\mathscr| command---$\mathscr{ABCDEFG}$.)
+
+\section{Symbols}
+The tables show most of the symbols available from the standard \LaTeX\ symbol 
+fonts. Negations of the relational symbols can be made with the \verb|\not| 
+command.
+
+\egstart
+$ G \not\equiv H $ 
+\egmid
+\verb|G \not\equiv H|
+\egend
+
+A very common mistake is to ignore the difference between
+the various `kinds' of symbols.  If you check the tables, you'll
+notice that some symbols are available in different ways.  The 
+difference is the spacing on either side of the symbol.
+For example to get a colon in math mode, you type \verb|:| or
+\verb|\colon|.  The second is a puctuation symbol, the first is 
+a relation symbol.  Here are examples of their \textit{proper} use.
+\egstart
+\( f\colon A\to B \)\\
+\( \{ x : x \not\in x \} \)
+\egmid
+\verb|\( f\colon A\to B \)|
+\verb|\( \{ x : x \not\in x \} \)|
+\egend
+
+The standard \LaTeX\ fonts have enough symbols for most people, see
+Tables~1--\ref{other}.
+If you need more you could try the \AmsTeX\ extra symbol fonts, most easily
+obtained by loading \verb|amssymb| using the \verb|\usepackage| command.
+See Tables \ref{ams}~to \ref{bbams}.  Much more control over mathematical
+typesetting is available as a series of \AmsLaTeX{} packages you can
+also load.
+
+\section{What about \$'s?}
+If you have converted to \LaTeX\ from plain or \AmsTeX, you will
+probably be wondering why there has been no mention of \verb|$| 
+and \verb|$$|.
+
+In these systems math mode is surrounded by \verb|$|'s and display math mode
+is surrounded by \verb|$$|. This has certain drawbacks over the \LaTeX\ system
+as it is difficult for your text editor to match \verb|$|'s as it is hard to 
+tell which ones are starting math mode and which are ending it. \TeX\ will also
+get confused if you miss a \$ out.
+
+The (incorrect) input 
+\begin{verbatim}
+let (a,b,c)$ be a Pythagorean triple, i.e.\ three 
+integers such that $a^{2}+b^{2}=c^{2}$.
+\end{verbatim}
+produces the slightly mysterious error message
+\begin{verbatim}
+! Missing $ inserted.
+<inserted text> 
+		$
+<to be read again> 
+		   ^
+l.56 ...triple, i.e.\ three integers such that $a^
+						  {2}+b^{2}=c^{2}$
+? 
+\end{verbatim}
+
+Note that it reports the wrong error and in the wrong place, the use of the
+\verb|^| command out of math mode. \TeX\ has typeset `be a \ldots\ such that'
+in math mode and {\em exited\/} math mode at the \verb|$| after `such that'. 
+If you had made the equivalent \LaTeX\ error, \LaTeX\ 
+has a better idea of what you indended:
+\begin{verbatim}
+let (a,b,c)\) be a Pythagorean triple, i.e.\ three 
+integers such that \(a^{2}+b^{2}=c^{2}\)
+\end{verbatim}
+The error message may still be unintelligable, but at least
+it reports the error in the right place, you have used \verb|\)|
+to end math mode when you were not in math mode (as you omitted the 
+\verb|\(| which should have been before the {\tt (a,b,c)}).
+\begin{verbatim}
+LaTeX error.  See LaTeX manual for explanation.
+	      Type  H <return>  for immediate help.
+! Bad math environment delimiter.
+\@latexerr ...for immediate help.}\errmessage {#1}
+						  
+\)...ifinner $\else \@badmath \fi \else \@badmath 
+						  \fi 
+l.56 let (a,b,c)\)
+		   be a Pythagorean triple, i.e.\ three integers such that \...
+
+? 
+\end{verbatim}
+
+The single dollar is sometimes useful for small
+sections of math.
+\egstart
+Let $G$ be a $p$-group
+\egmid
+\verb|Let $G$ be a $p$-group|
+\egend
+
+The double dollar is {\em not\/} always equivalent to \verb|\[ ... \]|,
+and so should not be used if you want your \LaTeX\ file to be compatible
+with different styles and style options (try the fleqn style option).
+
+\clearpage
+
+\def\W#1#2{$#1{#2}$ &\tt\string#1\string{#2\string}}
+\def\X#1{$#1$ &\tt\string#1}
+\def\Y#1{$\big#1$ &\tt\string#1}
+\def\Z#1{\tt\string#1}
+
+
+\begin{table}[p]
+\centering
+\begin{tabular}{*8l}
+\X\alpha        &\X\theta       &\X o           &\X\tau         \\
+\X\beta         &\X\vartheta    &\X\pi          &\X\upsilon     \\
+\X\gamma        &\X\gamma       &\X\varpi       &\X\phi         \\
+\X\delta        &\X\kappa       &\X\rho         &\X\varphi      \\
+\X\epsilon      &\X\lambda      &\X\varrho      &\X\chi         \\
+\X\varepsilon   &\X\mu          &\X\sigma       &\X\psi         \\
+\X\zeta         &\X\nu          &\X\varsigma    &\X\omega       \\
+\X\eta          &\X\xi                                          \\
+								\\
+\X\Gamma        &\X\Lambda      &\X\Sigma       &\X\Psi         \\
+\X\Delta        &\X\Xi          &\X\Upsilon     &\X\Omega       \\
+\X\Theta        &\X\Pi          &\X\Phi
+\end{tabular}
+\caption{Greek Letters}\label{greek}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{*8l}
+\X\pm           &\X\cap         &\X\diamond             &\X\oplus       \\
+\X\mp           &\X\cup         &\X\bigtriangleup       &\X\ominus      \\
+\X\times        &\X\uplus       &\X\bigtriangledown     &\X\otimes      \\
+\X\div          &\X\sqcap       &\X\triangleleft        &\X\oslash      \\
+\X\ast          &\X\sqcup       &\X\triangleright       &\X\odot        \\
+\X\star         &\X\vee         &\X\bigcirc     &\X\amalg \\
+\X\circ         &\X\wedge       &\X\dagger      &\X\wr      \\
+\X\bullet       &\X\setminus    &\X\ddagger     &\X\cdot    \\
+\X+             &\X-
+\end{tabular}
+\caption{Binary Operation Symbols}\label{bin}
+\end{table}
+
+
+\begin{table}
+\centering
+\begin{tabular}{*8l}
+\X\leq          &\X\geq         &\X\equiv       &\X\models      \\
+\X\prec         &\X\succ        &\X\sim         &\X\perp        \\
+\X\preceq       &\X\succeq      &\X\simeq       &\X\mid         \\
+\X\ll           &\X\gg          &\X\asymp       &\X\parallel    \\
+\X\subset       &\X\supset      &\X\approx      &\X\bowtie      \\
+\X\subseteq     &\X\supseteq    &\X\cong        &\X\propto      \\
+\X\neq          &\X\smile       &\X\vdash       &\X\dashv       \\
+\X\sqsubseteq   &\X\sqsupseteq  &\X\doteq       &\X\frown       \\
+\X\in           &\X\ni          &\X=            &\X>            \\
+\X<             &$:$&:
+\end{tabular}
+\caption{Relation Symbols}\label{rel}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{*{5}{lp{3.2em}}}
+\X,     &\X;    &\X\colon       &\X\ldotp       &\X\cdotp
+\end{tabular}
+\caption{Punctuation Symbols}\label{punct}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{*6l}
+\X\leftarrow            &\X\longleftarrow       &\X\uparrow     \\
+\X\Leftarrow            &\X\Longleftarrow       &\X\Uparrow     \\
+\X\rightarrow           &\X\longrightarrow      &\X\downarrow   \\
+\X\Rightarrow           &\X\Longrightarrow      &\X\Downarrow   \\
+\X\leftrightarrow       &\X\longleftrightarrow  &\X\updownarrow \\
+\X\Leftrightarrow       &\X\Longleftrightarrow  &\X\Updownarrow \\
+\X\mapsto               &\X\longmapsto          &\X\nearrow     \\
+\X\hookleftarrow        &\X\hookrightarrow      &\X\searrow     \\
+\X\leftharpoonup        &\X\rightharpoonup      &\X\swarrow     \\
+\X\leftharpoondown      &\X\rightharpoondown    &\X\nwarrow
+\end{tabular}
+\caption{Arrow Symbols}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{*8l}
+\X\ldots        &\X\cdots       &\X\vdots       &\X\ddots       \\
+\X\aleph        &\X\prime       &\X\forall      &\X\infty       \\
+\X\hbar         &\X\emptyset    &\X\exists      &\X\spadesuit   \\
+\X\imath        &\X\nabla       &\X\neg         &\X\heartsuit   \\
+\X\jmath        &\X\surd        &\X\flat        &\X\diamondsuit \\
+\X\ell          &\X\top         &\X\natural     &\X\clubsuit    \\
+\X\wp           &\X\bot         &\X\sharp       &\X\partial     \\
+\X\Re           &\X\|           &\X\backslash   &\X\triangle    \\
+\X\Im           &\X\angle       &\X.            &\X|
+\end{tabular}
+\caption{Miscellaneous Symbols}\label{ord}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{*6l}
+\X\sum          &\X\bigcap      &\X\bigodot     \\
+\X\prod         &\X\bigcup      &\X\bigotimes   \\
+\X\coprod       &\X\bigsqcup    &\X\bigoplus    \\
+\X\int          &\X\bigvee      &\X\biguplus    \\
+\X\oint         &\X\bigwedge    
+\end{tabular}
+\caption{Variable-sized  Symbols}\label{op}
+\end{table}
+
+
+\begin{table}
+\centering
+\begin{tabular}{*8l}
+\Z\arccos &\Z\cos  &\Z\csc &\Z\exp &\Z\ker    &\Z\limsup &\Z\min &\Z\sinh \\
+\Z\arcsin &\Z\cosh &\Z\deg &\Z\gcd &\Z\lg     &\Z\ln     &\Z\Pr  &\Z\sup  \\
+\Z\arctan &\Z\cot  &\Z\det &\Z\hom &\Z\lim    &\Z\log    &\Z\sec &\Z\tan  \\
+\Z\arg    &\Z\coth &\Z\dim &\Z\inf &\Z\liminf &\Z\max    &\Z\sin &\Z\tanh
+\end{tabular}
+\caption{Log-like Symbols}\label{log}
+\end{table}
+
+
+\begin{table}
+\centering
+\begin{tabular}{*8l}
+\X(             &\X)            &\X\uparrow     &\X\Uparrow     \\
+\X[             &\X]            &\X\downarrow   &\X\Downarrow   \\
+\X\{            &\X\}           &\X\updownarrow &\X\Updownarrow \\
+\X\lfloor       &\X\rfloor      &\X\lceil       &\X\rceil       \\
+\X\langle       &\X\rangle      &\X/            &\X\backslash   \\
+\X|             &\X\|
+\end{tabular}
+\caption{Delimiters\label{dels}}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{*8l}
+\Y\rmoustache&  \Y\lmoustache&  \Y\rgroup&      \Y\lgroup\\[5pt]
+\Y\arrowvert&   \Y\Arrowvert&   \Y\bracevert
+\end{tabular}
+\caption{Large Delimiters\label{ldels}}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{*{10}l}
+\W\hat{a}       &\W\acute{a}    &\W\bar{a}      &\W\dot{a}      &\W\breve{a}    \\
+\W\check{a}     &\W\grave{a}    &\W\vec{a}      &\W\ddot{a}     &\W\tilde{a}    \\
+\end{tabular}
+\caption{Math mode accents}\label{accent}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{*4l}
+\W\widetilde{abc}       &\W\widehat{abc}                \\
+\W\overleftarrow{abc}   &\W\overrightarrow{abc}         \\
+\W\overline{abc}        &\W\underline{abc}              \\
+\W\overbrace{abc}       &\W\underbrace{abc}             \\[5pt]
+\W\sqrt{abc}            &$\sqrt[n]{abc}$&\verb|\sqrt[n]{abc}|\\
+$f'$&\verb|f'|          &$\frac{abc}{xyz}$&\verb|\frac{abc}{xyz}|
+\end{tabular}
+\caption{Some other constructions}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{*4l}
+\X\mho             &\X\Join            \\
+\X\Box             &\X\Diamond         \\
+\X\sqsubset        &\X\sqsupset        \\
+\X\lhd             &\X\rhd             \\
+\X\unlhd           &\X\unrhd           \\
+\X\leadsto
+\end{tabular}
+\caption{Further symbols available with the \texttt{latexsym} package}\label{other}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{*4l}
+\X\boxdot               &\X\boxplus \\ 
+	\X\boxtimes            &\X\square              \\
+\X\blacksquare          &\X\centerdot\\ 
+	\X\lozenge             &\X\blacklozenge        \\
+\X\circlearrowright     &\X\circlearrowleft\\ 
+	\X\rightleftharpoons   &\X\leftrightharpoons   \\
+\X\boxminus             &\X\Vdash\\ 
+	\X\Vvdash              &\X\vDash               \\
+\X\twoheadrightarrow    &\X\twoheadleftarrow\\ 
+	\X\leftleftarrows      &\X\rightrightarrows    \\
+\X\upuparrows           &\X\downdownarrows\\ 
+	\X\upharpoonright      &\X\downharpoonright    \\
+\X\upharpoonleft        &\X\downharpoonleft\\ 
+	\X\rightarrowtail      &\X\leftarrowtail       \\
+\X\leftrightarrows      &\X\rightleftarrows\\ 
+	\X\Lsh                 &\X\Rsh                 \\
+\end{tabular}
+\caption{Some AMS symbols\label{ams}}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{*4l}
+\X\rightsquigarrow      &\X\leftrightsquigarrow\\ 
+	\X\looparrowleft       &\X\looparrowright      \\
+\X\circeq               &\X\succsim\\ 
+	\X\gtrsim              &\X\gtrapprox           \\
+\X\multimap             &\X\therefore\\ 
+	\X\because             &\X\doteqdot            \\
+\X\triangleq            &\X\precsim\\ 
+	\X\lesssim             &\X\lessapprox          \\
+\X\eqslantless          &\X\eqslantgtr\\ 
+	\X\curlyeqprec         &\X\curlyeqsucc         \\
+\X\preccurlyeq          &\X\leqq\\ 
+	\X\leqslant            &\X\lessgtr             \\
+\X\backprime            &\X\risingdotseq\\ 
+	\X\fallingdotseq       &\X\succcurlyeq         \\
+\X\geqq                 &\X\geqslant\\ 
+	\X\gtrless             &\X\sqsubset            \\
+\X\sqsupset             &\X\vartriangleright\\ 
+	\X\vartriangleleft     &\X\trianglerighteq     \\
+\X\trianglelefteq       &\X\bigstar\\ 
+	\X\between             &\X\blacktriangledown   \\
+\X\blacktriangleright   &\X\blacktriangleleft\\ 
+	\X\vartriangle         &\X\blacktriangle       \\
+\X\triangledown         &\X\eqcirc\\ 
+	\X\lesseqgtr           &\X\gtreqless           \\
+\X\lesseqqgtr           &\X\gtreqqless\\ 
+	\X\Rrightarrow         &\X\Lleftarrow          \\
+\X\veebar               &\X\barwedge\\ 
+	\X\doublebarwedge      &\X\angle               \\
+\X\measuredangle        &\X\sphericalangle\\ 
+	\X\varpropto           &\X\smallsmile          \\
+\X\smallfrown           &\X\Subset\\ 
+	\X\Supset              &\X\Cup                 \\
+\X\Cap                  &\X\curlywedge\\ 
+	\X\curlyvee            &\X\leftthreetimes      \\
+\X\rightthreetimes      &\X\subseteqq\\ 
+	\X\supseteqq           &\X\bumpeq              \\
+\X\Bumpeq               &\X\lll\\ 
+	\X\ggg                 &\X\circledS            \\
+\X\pitchfork            &\X\dotplus\\ 
+	\X\backsim             &\X\backsimeq           \\
+\X\complement           &\X\intercal\\ 
+	\X\circledcirc         &\X\circledast          \\
+\X\circleddash          &\X\ulcorner\\ 
+	\X\urcorner            &\X\llcorner            \\
+\X\lrcorner             &\X\yen\\ 
+	\X\checkmark           &\X\circledR            \\
+\X\maltese              &\X\lvertneqq\\ 
+	\X\gvertneqq           &\X\nleq                \\
+\end{tabular}
+\caption{More AMS symbols\label{mams}}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{*4l}
+
+\X\ngeq                 &\X\nless\\ 
+	\X\ngtr                &\X\nprec               \\
+\X\nsucc                &\X\lneqq\\ 
+	\X\gneqq               &\X\nleqslant           \\
+\X\ngeqslant            &\X\lneq\\ 
+	\X\gneq                &\X\npreceq             \\
+\X\nsucceq              &\X\precnsim\\ 
+	\X\succnsim            &\X\lnsim               \\
+\X\gnsim                &\X\nleqq\\ 
+	\X\ngeqq               &\X\precneqq            \\
+\X\succneqq             &\X\precnapprox\\ 
+	\X\succnapprox         &\X\lnapprox            \\
+\X\gnapprox             &\X\nsim\\ 
+	\X\ncong               &\X\varsubsetneq        \\
+\X\varsupsetneq         &\X\nsubseteqq\\ 
+	\X\nsupseteqq          &\X\subsetneqq          \\
+\X\supsetneqq           &\X\varsubsetneqq\\ 
+	\X\varsupsetneqq       &\X\subsetneq           \\
+\X\supsetneq            &\X\nsubseteq\\ 
+	\X\nsupseteq           &\X\nparallel           \\
+\X\nmid                 &\X\nshortmid\\ 
+	\X\nshortparallel      &\X\nvdash              \\
+\X\nVdash               &\X\nvDash\\ 
+	\X\nVDash              &\X\ntrianglerighteq    \\
+\X\ntrianglelefteq      &\X\ntriangleleft\\ 
+	\X\ntriangleright      &\X\nleftarrow          \\
+\X\nrightarrow          &\X\nLeftarrow\\ 
+	\X\nRightarrow         &\X\nLeftrightarrow     \\
+\X\nleftrightarrow      &\X\divideontimes\\ 
+	\X\varnothing          &\X\nexists             \\
+\X\mho                  &\\% was: \X\thorn\\ 
+	\X\beth                &\X\gimel               \\
+\X\daleth               &\X\lessdot\\ 
+	\X\gtrdot              &\X\ltimes              \\
+\X\rtimes               &\X\shortmid\\ 
+	\X\shortparallel       &\X\smallsetminus       \\
+\X\thicksim             &\X\thickapprox\\ 
+	\X\approxeq            &\X\succapprox          \\
+\X\precapprox           &\X\curvearrowleft\\ 
+	\X\curvearrowright     &\X\digamma             \\
+\X\varkappa             &\X\hslash\\ 
+	\X\hbar                &\X\backepsilon
+\end{tabular}
+\caption{Even more AMS symbols\label{emams}}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{*2l}
+$\mathbb{A~B~C~D~E~F}$ & \verb|\mathbb A \mathbb B ... |\\
+$\mathfrak{A~B~C~D~E~F}$ & \verb|\mathfrak A \mathfrak B ... |\\
+$\mathscr{A~B~C~D~E~F}$ &\verb|\mathscr A \mathscr B ... |
+\end{tabular}
+\caption{Other symbol fonts available with \texttt{amssymb} and \texttt{mathrsfs}}\label{bbams}
+\end{table}
+
+
+
+\end{document}

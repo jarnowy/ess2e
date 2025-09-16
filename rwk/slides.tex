@@ -1,0 +1,185 @@
+\documentclass[a4paper,landscape]{slides}
+\newcommand{\bs}{$\backslash$}
+\newcommand{\fn}[1]{{\tt #1}}
+
+\begin{document}
+
+\title{Introduction to \LaTeX}
+\author{Richard Kaye}
+\date{Friday October 18th, 2002}
+\maketitle
+
+\newpage
+
+\textbf{Making slides using \LaTeX}
+
+These slides 
+\begin{itemize}
+\item introduce \LaTeX\ to newcomers
+\item outline some of the goals and themes
+for successful use of \LaTeX.  (Important 
+information whatever your \LaTeX\ skills are!)
+\item provides an example of how you might prepare
+slides for a talk or lecture using \LaTeX
+\end{itemize}
+
+\newpage
+
+\textbf{Typesetting} 
+
+\TeX\ is a \textit{typesetting program}, not a word processor.
+
+A typesetting program decides where symbols, such as 
+letters, punctuation etc., should appear.  
+
+Typesetting is a highly developed art with many subtle points, 
+and is \textit{much} more difficult to get right than it looks.  
+
+\begin{itemize}\bf
+\item A document is only as good as its content.
+\item The \textit{only} objective in typesetting a
+technical document is to make your document as easy to read as 
+possible.
+\end{itemize}
+
+\newpage
+
+\textbf{Document design}
+
+Even harder than simple typesetting is \textit{document design}.
+Bad design is irritating and detracts from your content.
+Good design is `invisible' and rarely noticed.
+
+\newpage
+
+\textbf{\TeX}
+
+\TeX\ is a freely available typesetting program that 
+works in some way or other on almost all computers
+with almost all printers.
+
+\textbf{Advantages} \TeX\ is:
+ free software; presumed bug-free;
+ standard; everyone has it (or can get it);
+ allows you to typeset documents to the 
+ very highest standards.
+
+\textbf{Disadvantages} \TeX\ is: user-unfriendly;
+ sometimes difficult to use well.
+
+\newpage
+
+\textbf{\LaTeX}
+
+\LaTeX\ is a set of packages extending \TeX\ which 
+takes care of much of the document design.
+
+It requires you to describe the \textbf{logical structure} 
+of your document (sections, subsections, titles, etc.)~and 
+leave \LaTeX\ to fit these to some built-in document design.  
+
+\begin{itemize}
+\item \LaTeX\ manages cross-references (theorem numbers, 
+bibliography, page references, etc.)~automatically.
+\item There is a vast library of styles and packages you may use, 
+or you may define your own.
+\end{itemize}
+
+\newpage
+
+The following tasks are listed in approximate order of difficulty.
+\begin{enumerate}\itemsep=0pt
+\item Simple text.
+\item Simple mathematics.
+\item Alignment, tables.
+\item More complicated mathematics, e.g., involving alignments.
+\item Document design: choice of typefaces, spacing, margins.
+\item Typography: design of typefaces.
+\end{enumerate}
+
+\newpage
+
+\textbf{What do I need for this course?}
+
+You need access to one of the department's solaris servers.\\
+All materials for the course are on-line at\\
+\texttt{http://web.mat.bham.ac.uk/R.W.Kaye/latex/}
+
+\begin{small}
+
+If you want to use \LaTeX\ on your computer at home\ldots
+
+Mik\TeX\ (\TeX\ for Win32 operating systems) is at\\
+\texttt{http://www.miktex.org/}.  \TeX\ is available
+for other OSs too.
+
+You will need a text editor.  For Win32, WinEdt 
+(\texttt{http://www.winedt.com/}) can
+be recommended, but is shareware (i.e., you have to pay for
+it---\$30 for students). If you prefer not to
+pay, try PFE 
+(\texttt{http://www.lancs.ac.uk/people/steveb/cpaap/pfe/default.htm})
+or emacs (\texttt{http://www.gnu.org/software/emacs/emacs.html}).
+
+\end{small}
+
+\newpage
+
+\textbf{What are we trying to do?}
+
+Your \LaTeX\ documents should describe the
+structure of the document and content \textit{not}
+its visual appearance.
+
+E.g., tell \LaTeX\ where sections, subsections, etc., start
+and end and resist the temptation to tell it where
+line breaks and pages breaks should be.
+
+Here are a few golden rules:
+\begin{itemize}\itemsep=0pt
+\item whatever you do, be consistent
+\item keep things simple
+\item use the LaTeX environments and commands given wherever possible
+      and nest environments in the most logical way
+\item use \LaTeX\ commands and environments to describe structure
+\item whenever you find you are using the same construction or notation 
+regularly, write a macro or environment for it
+\item avoid visual formatting
+\item don't use plain \TeX\ commands
+\item if you do need to change the default styles or visually format 
+your document differently, write a special custom class or style file
+\end{itemize}
+
+This principle of presenting logical structure rather than visual
+formatting is the same as for (good) HTML, XHTML, XML.
+
+\newpage
+
+\textbf{Making \LaTeX\ slides}
+
+To make slides, you use the \verb|slides| document class.
+
+Most of the usual text formatting commands are available, 
+as you will see, but note that sectioning commands (\verb|\paragraph|,
+\verb|\section|, etc.)~are not available.  You have to do these
+`by hand' with \verb|\textbf|, etc.  You may find you make quite
+a lot more use of \verb|\newpage| and \verb|\\| than normal.
+
+\newpage
+
+You will note that the fonts are different too.
+
+Many people think that the slides package uses 
+the wrong font or wrong size.  
+
+Be very careful about changing these defaults.  
+Smaller fonts become almost impossible to read
+from the back of a lecture theatre.  (If you must, 
+try it out.  But by all means \textit{increase}
+the size of the fonts though!)  
+
+Although it is not the usual font for textbooks,
+the sans-serif font used here is less cluttered
+and easier to read at a distance.
+
+\end{document}

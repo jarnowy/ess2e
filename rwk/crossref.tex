@@ -1,0 +1,341 @@
+\documentclass[a4paper]{article}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{chall}[thm]{Challenge}
+
+\title{Cross references in \LaTeX}
+\author{Richard Kaye\\School of Mathematics and Statistics\\
+The University of Birmingham\\Birmingham B15 2TT\\U.K.}
+
+\date{12th October 2000}
+
+\begin{document}
+
+\maketitle
+
+% any of the following commands may be used to give the title
+% and list of contents/tables/figures
+
+\tableofcontents % writes and/or reads in crossref.toc
+\listoftables    % writes and/or reads in crossref.lot
+\listoffigures   % writes and/or reads in crossref.lof
+
+\section{Introduction}
+
+This document is intended to be used as a model for
+\LaTeX\ documents that use cross-referencing.  It should
+be studied in conjunction with its source the file, 
+\texttt{crossref.tex}, which was used to produce it.  Only 
+the most basic kinds of \LaTeX~cross-referencing commands 
+are mentioned here. In particular, I will not mention 
+indexing nor creating a glossary or index of notation. 
+Perhaps the most 
+important omission here is  Bib\TeX, for bibliographies.
+All these tools are discussed and used in other example
+documents,~\cite{indexntn,extraref} available on the web.
+
+Note that the parts labelled `challenge' (such as 
+Challenge~\ref{doesnotconverge} on 
+page~\pageref{doesnotconverge} below) are intended 
+for experts only.  They are \textit{not} easy.
+
+\section{More cross references}\label{sec:more}
+
+To show how sections can be
+labelled and referred to, note that this is section~\ref{sec:more}.
+
+This section also contains a more complicated example, a figure
+created with the \LaTeX\ `picture' environment (Figure~\ref{samplefigure}).
+
+\begin{figure}
+\caption{A figure by Lamport}\label{samplefigure}
+\begin{center}
+%this Example is from Lamport's book on LaTeX:
+\newcounter{cms}
+\setlength{\unitlength}{1mm}% set units to 1mm
+\begin{picture}(50,39)% size in units of 1mm
+\put(0,7){\makebox(0,0)[bl]{cm}}
+\multiput(10,7)(10,0){5}{\addtocounter{cms}{1}\makebox(0,0)[b]{\arabic{cms}}}
+\put(15,20){\circle{6}}
+\put(30,20){\circle{6}}
+\put(15,20){\circle*{2}}
+\put(30,20){\circle*{2}}
+\put(10,24){\framebox(25,8){car}}
+\put(10,32){\vector(-2,1){10}}
+\multiput(1,0)(1,0){49}{\line(0,1){2.5}}
+\multiput(5,0)(10,0){5}{\line(0,1){3.5}}
+\thicklines
+\put(0,0){\line(1,0){50}}
+\multiput(0,0)(10,0){6}{\line(0,1){5}}
+\end{picture}
+\end{center}
+\end{figure}
+
+The precise code that created this figure is more advanced, and you can skip it for
+now.  But note that \LaTeX\ gives you very little control of where the figure 
+is actually positioned on the page.  (In the jargon, it is a `floating object'.)
+
+\begin{chall}\label{pictureproblem} 
+Explain the commands used in Figure~\ref{samplefigure}
+(these occur in Lamport's book \cite{latexbook}, page 197).
+\end{chall}
+
+We can define tables in similar sort of way, such as Table~\ref{sampletable}.
+
+\begin{table}
+\caption{A test table}\label{sampletable}
+\begin{center}
+\begin{tabular}{ll|r|c|l}
+Surname & First name & Age & Sex & Recommended treatment \\
+\hline\hline
+Regan & Ronald & 99 & male & Deport to Nicaragua \\
+\hline
+Major & John   & ? & indeterminate & Send to Coventry \\
+\hline
+Thatcher & Margaret & 134 & female & Banish to Los Malvinas \\
+\hline\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\section{The table of contents}
+
+The command \verb|\tableofcontents| is used to create a table
+of contents.  It is usually placed just after the 
+\verb|\maketitle| command but before the first \verb|\section|,
+\verb|\chapter| or \verb|\part|.  The command does two
+things.  Firstly, it instructs \LaTeX\ to create a \texttt{.toc}
+file (with the same same as the main file), and as \LaTeX\ processes
+your file, it stores all the data concerning what parts, chapters
+and sections your document contains and on what pages they appear.
+Secondly, it reads any \texttt{.toc} file that is already present
+and uses the data there to create a table of contents.  Thus
+the data for the table of contents is always created in the previous
+run of \LaTeX, not the current one.  It follows that you must
+run \LaTeX\ twice if for any reason you suspect that the
+data in the \texttt{.toc} file is out of date.  (The same applies
+to the other cross-referencing commands, but for a file called
+the \texttt{.aux} file instead of the \texttt{.toc} file.)
+
+\section{The label, ref, and pageref commands}
+
+The \verb|\label|, \verb|\ref|, and \verb|\pageref| commands
+are by far the most important ones.  The command \verb|\label|
+sets up a label for the most `important' piece of data according to
+\LaTeX\ at the given moment.  (It may be a section number, or a theorem
+number, or an equation number.)  This data, and its page reference
+is written to the \texttt{.aux} file.  On the second pass, the command
+\verb|\ref| will be replaced by the appropriate text or number,
+and the command \verb|\pageref| gives the appropriate page number.
+
+Some things to note:
+\begin{enumerate}
+\item The \texttt{.aux} file might be out of date; it's worth
+running \LaTeX\ two (or sometimes three) times to check.  
+\item Normal references only take two passes.  Page 
+references may take three.
+\item Words like `equation' or `theorem' are not provided by
+the \verb|\ref| command.  You have to type these yourself.\label{typeyourself}
+\item Most letters or punctuation symbols are OK in labels.
+\end{enumerate}
+
+As an example of what's needed when making a cross-reference 
+(see item \ref{typeyourself} above), consider the
+cross-reference to page \pageref{selfref}\label{selfref},
+referring to Challenge \ref{pictureproblem} on 
+page \pageref{pictureproblem}.
+
+The `tie' symbol \verb|~|, by the way, behaves like a normal space
+character `\verb| |', except that it is never broken across
+a line, so if you type \begin{quote}\verb|Table~\ref{sampletable}|\end{quote} 
+you will not have the unfortunate effect of splitting `Table'
+from the table number.  See the example of `item~\ref{typeyourself}'
+in the last paragraph.
+
+Here is the same paragraph with these tie signs instead of
+spaces.
+
+As an example of what's needed when making a cross-reference 
+(see item~\ref{typeyourself} above), consider the
+cross-reference on page~\pageref{selfrefa}\label{selfrefa},
+referring to Challenge~\ref{pictureproblem} on 
+page~\pageref{pictureproblem}.
+
+\begin{chall}  I spent ages modifying my text so that 
+`item \ref{typeyourself}' accidently went across a line-break.
+How could I have used \LaTeX's more advanced commands to
+achieve this effect effortlessly?
+\end{chall}
+
+\begin{thm}\label{examplethm} This text is littered
+with examples of \verb|\label| and \verb|\ref|.
+\end{thm}
+
+Theorem~\ref{examplethm} is true, and to prove the point 
+even more stongly,  here are some more examples.
+
+First, an equation
+\begin{equation}
+e^{i\pi}=-1 \label{eipi-1}
+\end{equation}
+
+It seems that every mathematician comments at some point in their
+life that Equation~\ref{eipi-1} on page~\pageref{eipi-1}
+is one of the most beautiful in mathematics;  
+I would hate to be an exception to the rule.
+
+\begin{eqnarray}
+1 & = & 1 \label{tri1}\\
+1 +2 & = & 3 \label{tri2}\\
+1 +2+3 & = & 6 \nonumber\\
+1 +2+3 +4& = & 10 \label{tri4}
+\end{eqnarray}
+
+Here's a silly question that doesn't deserve an answer:
+What should the number of the equation between
+\ref{tri2} and \ref{tri4} be?
+
+\section{Writing a bibliography}
+
+Put very simply, you make a bibliography with the
+\texttt{thebibliography} environment.  For example, the
+bibliography for this document starts
+\begin{verbatim}
+\begin{thebibliography}{XXX}
+\bibitem{jones} A. N. Jones, {\it Made up paper ...
+...
+\end{thebibliography}  
+\end{verbatim}
+
+The \verb|XXX| should be
+the length of the longest printable key, which is usually
+a number, and not the same as the `\LaTeX\ key' you
+use to refer to it in your document.  (So for
+bibliographies with between 10 and 99 entries, any two digit number
+for \verb|XXX| is fine.)  Each item in the bibliography
+is introduced with \verb|bibitem{latexkey}|.  \LaTeX\ automatically
+assigns each item a number, which is the printed key.  To make
+a reference to an item you type \verb|\cite{latexkey}|.  This creates
+a number in square brackets \cite{latexbook}.
+
+Some dos and don'ts on citations.
+\begin{enumerate}  
+\item \LaTeX\ has provision for you
+to provide your own printable keys.  
+I strongly recommend you do {\it not\/}
+use them.  Keys other than numbers look ugly and are no more
+helpful (sometimes less helpful).
+\item Decide whether you want your references to be in citation-order
+or in alphabetical order. \LaTeX\ won't do this for you.\label{biborder}
+\item The point of the numbered system is that you can give references
+without interrupting, breaking, or changing your text \cite{bibtexguide}.
+So write as if the numbers in square brackets are not there.  Your
+English should still be grammatical and understandable if they are
+removed.  Don't indulge in the horrible habit of writing something like
+`Jones in \cite{jones} said that this is true.'  Instead, 
+write `Jones \cite{jones} said that this is true.'
+\item Publishers are very fussy (with good reason) about the format
+of the bibliography entries, especially punctuation and typeface.
+Be careful!
+\end{enumerate}
+
+If you don't like this system, {\sc Bib}\TeX\ provides
+a useful improvement, but at some extra cost of implementing
+it. See my sequel to this paper~\cite{extraref}.
+In particular, {\sc Bib}\TeX\ will sort the items into
+alphabetical order for you \cite{extraref,bibtexguide}.
+
+Bibliographic data is written to the \texttt{.aux} file, and so
+cross-references will not be completed until the second run 
+through \LaTeX.
+
+\section{\LaTeX's warning messages}
+
+\LaTeX\ will warn you if it thinks you need to rerun 
+the program to get cross-references right.  It tends to be
+over-cautious (in particular it checks all references and labels,
+even ones you don't refer to by both page and number) but it's
+wise not to ignore these messages.
+
+\section{The nofiles command}\label{nofilessect}
+
+In you really want to stop \LaTeX\ producing all those extra
+files, you put the command \verb|\nofiles| in the preamble. You should do this
+if the auxillary files have been created, you're sure they are right
+and you don't want to destroy them.
+
+\section{The include and includeonly commands}
+
+These allow a long document to be split into several small parts.
+This saves time when running \LaTeX, since you don't have to print out
+the whole document each time you make a change, and yet \LaTeX\ will
+get the page numbers and cross-referencing right.  This example
+document is too short to demonstrate this feature, but you will certainly
+want to use it when you are writing a book, a longish report, or a thesis.
+
+Roughly, you put each chapter in a separate file (e.g., \texttt{chap1.tex}, and
+you read this file in from the main document with the \verb|\include|
+command, e.g., you type \verb|\include{chap1}|.  
+The document is then \LaTeX ed
+normally.  But if at a later stage you make a change to chapter 2,
+and only want that chapter printed off, you put \verb|\includeonly{chap2}|
+in the main document, somewhere before the `\verb|\begin{document}|'.
+Then the auxillary files \texttt{chap1.aux} etc., will be read to determine
+on what page chapter 2 starts, and to get all cross references right,
+but only the required chapter will go into the \texttt{.dvi} file.
+
+See Lamport's book \cite{latexbook} for details.
+
+\section{Tips on cross-referencing}\label{sec:tips}
+
+I find it helpful to indicate in the label what is being referred
+to , for example, this section is labelled with \verb|\label{sec:tips}|
+to remind me that it is a section.  This avoids the possible
+pitfall of erroneously referring to Theorem~\ref{doesnotconverge}
+when it is actually a `challenge'.
+
+\section{You need to run \LaTeX\ several times}
+
+To get the cross-referencing information correct, you
+need to run \LaTeX\ several times.  Usually two or three
+runs suffice, but things can vary. Some published examples 
+are terrible, and I can think of one where the table
+of contents is incorrect because the final run of \LaTeX\
+was omitted~\cite{smullyan}. Don't make your documents 
+look like this!
+
+\begin{chall}\label{doesnotconverge}  Write a
+\LaTeX\ document so that the data in the \texttt{.toc}
+or the \texttt{.aux} file always changes every time you run \LaTeX.
+In other words, fool \LaTeX\ so that its cross-referencing
+system is always wrong. Try and make your document as short as possible.
+\end{chall}
+
+Although it is possible to fool \LaTeX, it is very difficult to
+do so and almost impossible unless you deliberately try to do so.
+
+\begin{thebibliography}{9}% we have fewer than 10 entries, so use "9"
+
+\bibitem{jones} A. N. Jones, {\it Made up paper for the purposes of giving
+an example}.  Journal of imaginary statements and  transitory phenomena,
+pp. 99--98.
+
+\bibitem{extraref} Richard Kaye, {\it Other cross-referencing tools for \LaTeX}.
+Available on the web at \texttt{http://web.mat.bham.ac.uk/R.W.Kaye/latex/extraref.tex}.
+
+\bibitem{indexntn} Richard Kaye, {\it Making an index of notation}.
+Available on the web at \texttt{http://web.mat.bham.ac.uk/R.W.Kaye/latex/indexntn.tex}.
+
+\bibitem{latexbook} Leslie Lamport, {\it \LaTeX, a document preparation 
+system}.
+
+\bibitem{bibtexguide} O. Patasnik, {\it Bib\TeX{}ing.}  Supplied with
+{\sc Bib}\TeX.
+
+\bibitem{smullyan} R. M. Smullyan, {\it Recursion Theory for Metamathematics}.
+Oxford University Press, 1993.
+
+\end{thebibliography}
+
+\end{document}
+

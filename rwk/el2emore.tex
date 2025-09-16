@@ -1,0 +1,441 @@
+%                          Further notes on using LaTeX2e.
+%
+% Supplement to "Essential LaTeX" and "Essential mathematical LaTeX"
+%                                  - Richard Kaye,  Nov/Dec 1994
+%
+\documentclass[11pt,a4paper]{article}
+\usepackage{amssymb}
+
+\newcommand{\fn}[1]{{\tt #1}}
+\newcommand{\cn}[1]{{\tt \char"5C #1}}
+
+\title{More essential \LaTeXe}
+\author{Richard Kaye\thanks{School of Mathematics and Statistics, 
+The University of Birmingham, Birmingham B15 2TT, U.K.}}% If you
+% change the document in any way, put your own name here instead of mine
+\date{12th August 1998}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+
+This document is a supplement to {\it Essential \LaTeXe} and to
+{\it Essential Mathematical \LaTeX}.  The main points covered are:
+\begin{itemize}
+\item an overview of how the components of the \TeX~system work together;
+\item the rationale behind \LaTeXe, and in what way it differs from the
+previous version, \LaTeX~2.09;
+\item more information on the use of fonts in \LaTeXe;
+\item some ideas and pointers more advanced use of \LaTeXe, such as the 
+use of user-defined commands.
+\end{itemize}
+
+As always, you are encouraged to modify this file to experiment with the
+ideas here or as your own reference to suit your own use later.
+
+\section{The components of \TeX}
+
+Much of this is just background information relating to
+how \TeX\ and its various components fit together, and the need
+for a new version of \LaTeX.
+
+\TeX~is a typesetting program which takes your document (which is a
+standard text file) and typesets it according to certain built-in rules
+and other rules which are automatically read in from other files.
+Basically, \TeX\ is a glorified typewriter.  When it sees the letter
+`a', it just goes and typesets a letter a in the current font.  
+
+To do this it reads information about all the fonts you will use
+from special files (called `\TeX~font metric' files, having 
+suffix \fn{.tfm}) which tell \TeX~how large each character is
+and how much space is normally left between characters.  Using this
+information, \TeX~decides what characters should be put where on the 
+pages, and stores this information in the output (\fn{.dvi}) file.
+
+To further control how the output looks, \TeX~has various 
+other primitive commands which can be used. You will almost never
+have to work with these (although the details can be found in 
+Knuth's {\it The \TeX book}).  Fortunately \TeX\ also has a mechanism to
+define other commands from old ones (using a device called {\it 
+macro expansion\/}), and you normally use \TeX~by first loading
+a package of new commands (or macros) and working with those commands 
+instead.
+
+Packages for \TeX\ are available for typesetting almost any language,
+and there are many other packages too, even one to typeset music, called
+Music\TeX.
+
+The popularity of \TeX\ is due in part to the popularity of these
+packages. The original macro package for \TeX\ is (oddly) called
+{\it plain \TeX\/}, even though it is much more powerful than the
+primitive set of commands that are used.  Then, the American Mathematical 
+Society developed another one, AMS-\TeX, and Lesie Lamport developed
+\LaTeX. Arising from experience of these two, AMS-\LaTeX~was developed.
+No two of these systems are compatible with each other, although
+it is almost true that plain \TeX\ is a subset of the other three.
+In fact, it is even worse than this, and many dialects of \LaTeX\
+are in use, some with and some without the `new font selection scheme',
+and even ones with this scheme are set up differently.
+\LaTeX\ itself has the ability to load new packages (so-called 
+style or \fn{.sty} files), and hundreds are available for all sorts of
+applications.  Unfortunately standardization in these packages seems
+to be rare, and the situation is rather a mess.  The latest version 
+of \LaTeX, \LaTeXe, was developed to sort out the muddle with the different
+dialects of \LaTeX\ and its various packages, and is discussed more below.
+
+There are two further components of the \TeX~system that are worth 
+mentioning.  The first (and most important to the user) is the family
+of so-called {\it drivers\/} which convert the \fn{.dvi} file to a
+printed output, or at least to something you can read.  By necessity,
+these drivers are machine dependent, and you will need a different driver
+for each type of printer or screen.  On the sun
+network you will use \fn{dvips}, which converts the \fn{.dvi} file
+to postscript and prints it normally on a laser printer, 
+and \fn{xdvi} which views a \fn{.dvi}
+file on an X-terminal.  Drivers are also available for most other
+computers and output devices.
+
+Roughly what a driver does is read the \fn{.dvi} file and also
+information about the shape of characters in a font (usually from
+\fn{.pk} files---this part is done automatically) and produces a 
+graphic image which can be printed or viewed.
+
+The other component of the \TeX~system is called {\it Metafont},
+and is used to create the font files from specially written programs.
+So in principle, you can design your own characters in your 
+mathematical papers, but of course in practice this is time-consuming
+and difficult to get to look good.  But sometimes, if \fn{dvips}
+can't find a font you will find it calling Metafont automatically to 
+generate it.
+
+\TeX\ was designed for maximum portability between computers and 
+different printers.  (That means it is an ideal format to send academic 
+papers to a colleague by email.  But it is often wise to check that your
+colleague has similar fonts and macro packages.)  A disadvantage is that
+you cannot always directly use special features of your computer/printer
+when working with \TeX\ and its normal fonts, for example drawing long 
+diagonal lines and incorporating images is difficult to do with
+\TeX's normal \fn{.tfm}, \fn{.pk} fonts.  There are several ways
+to work round the problem if you can be sure you (and your colleagues)
+only work with one driver (\fn{dvips} for example) or can print out
+postscript files directly.
+
+Finally, the \TeX\ software is extensive, covering typesetting in 
+almost every language and in almost any application, and
+just about all of this software is public domain
+and/or free.  If you need some extra package it can usually be
+obtained by ftp from \fn{ftp.tex.ac.uk} for example.
+
+\section{What's new in \LaTeXe}
+
+\LaTeX\ is not just one package, but also a rather general way of
+choosing packages, loading new commands and further packages, and also
+(if you should want or need to) designing document styles.  Packages
+and styles are read in by \LaTeX\ as \fn{.sty} files.  You can write 
+these yourself, or you can use a \fn{.sty} file written by someone
+else (there are literally hundreds available).  Unfortunately this
+proliferation of styles and packages caused more confusion, since
+many were given the same name (or new versions of a \fn{.sty} file
+were written with the same name and different functionality).  
+\LaTeXe\ was devised to provide a standard base to all users.  
+It was released in the summer of 1994 and is widely available, but 
+unfortunately is not loaded onto every system yet!
+
+The {\it new font selection scheme\/} (nfss) built into \LaTeXe\ makes
+using special symbol fonts for mathematics, and using postscript fonts 
+(rather that Knuth's `Computer Modern' fonts) much easier---provided 
+of course you use a driver like \fn{dvips}. If you
+want to use the additional features developed for typesetting mathematics
+by the AMS, or if you want to use postscript fonts, you are strongly 
+advised to use \LaTeXe.
+
+\LaTeXe\ has a `compatibility mode', and if it sees a line like
+\begin{verbatim}
+\documentstyle[11pt,a4,amssymb]{article} 
+\end{verbatim}
+it recognises the document as a \LaTeX~2.09 document and tries
+to emulate \LaTeX~2.09.  (This is usually but not always 
+successful---some documents will be typeset differently, especially 
+if you try to use an incompatible package.)  On the other hand a true
+\LaTeXe\ document will start with
+\begin{verbatim}
+\documentclass[11pt,a4paper]{article}
+\usepackage{amssymb}
+\end{verbatim}
+say, and the document can then use the new features of 
+\LaTeXe\ (and typesetting should be quicker as well).
+
+Key to \LaTeXe\ is the idea of a `document-class'---what sort of document 
+it is (an article, a book, or whatever)---and the distinction between this
+and a `package'.  In \LaTeX~2.09 the distinction was blurred.
+There are many other enhancements made `behind the scenes' that make
+writing classes, packages and styles easier and enable them to 
+work more reliably and predictably.  This probably is the most important
+improvement, and is part of the longer-term design of the next release
+of \LaTeX, \LaTeX~3, which will not have any obvious new features
+to the user, but will have a host of new features to the writer of \LaTeX\
+packages.
+
+\section{About using fonts}
+
+The new font selection scheme (nfss) works in a significantly different
+way to the old font mechanism in \LaTeX~2.09 and plain \TeX,
+although in most cases the difference should be transparent to the
+user.  Occasionally, a more detailed knowledge than given in 
+`Essential \LaTeXe' is required.
+
+Every font has: (a)~a family name; (b)~a series; and (c)~a shape.  
+Each of these three attributes can be changed independently.  
+The three main families are (1)~roman, as here, (2)~sans-serif, 
+{\sffamily like this}, and (3)~typewriter, {\ttfamily like this}.  
+The commands for selecting
+these families are respectively \cn{rmfamily}, \cn{sffamily}
+and \cn{ttfamily}.  Each font in each family has {\it series}, indicating
+whether it is bold or medium-weight.
+The commands for selecting
+these series are  \cn{bfseries}, \cn{mdseries}.  Finally, the {\it
+shape} of the font is whether the letters are upright,
+italic, slanted, or caps-and-small-caps.
+
+Here's a summary table.
+{
+
+\paragraph{\rmfamily 1. Roman family}
+
+\rmfamily
+\begin{center}\begin{tabular}{l|cccc}
+& \cn{upshape} & \cn{itshape} & \cn{slshape} & \cn{scshape} \\
+\hline
+\cn{mdseries} %
+   & \mdseries\upshape Upright % 
+   & \mdseries\itshape Italic % 
+   & \mdseries\slshape Slanted % 
+   & \mdseries\scshape Small Caps \\
+\cn{bfseries} %
+   & \bfseries\upshape Upright % 
+   & \bfseries\itshape Italic % 
+   & \bfseries\slshape Slanted % 
+   & \bfseries\scshape Small Caps \\
+\hline
+\end{tabular}\end{center}
+
+\paragraph{\sffamily 2. Sans serif family}
+
+\sffamily
+\begin{center}\begin{tabular}{l|cccc}
+& \cn{upshape} & \cn{itshape} & \cn{slshape} & \cn{scshape} \\
+\hline
+\cn{mdseries} %
+   & \mdseries\upshape Upright % 
+   & \mdseries\itshape Italic % 
+   & \mdseries\slshape Slanted % 
+   & \mdseries\scshape Small Caps \\
+\cn{bfseries} %
+   & \bfseries\upshape Upright % 
+   & \bfseries\itshape Italic % 
+   & \bfseries\slshape Slanted % 
+   & \bfseries\scshape Small Caps \\
+\hline
+\end{tabular}\end{center}
+
+\paragraph{\ttfamily 3. Typewriter family}
+
+\ttfamily
+\begin{center}\begin{tabular}{l|cccc}
+& \cn{upshape} & \cn{itshape} & \cn{slshape} & \cn{scshape} \\
+\hline
+\cn{mdseries} %
+   & \mdseries\upshape Upright % 
+   & \mdseries\itshape Italic % 
+   & \mdseries\slshape Slanted % 
+   & \mdseries\scshape Small Caps \\
+\cn{bfseries} %
+   & \bfseries\upshape Upright % 
+   & \bfseries\itshape Italic % 
+   & \bfseries\slshape Slanted % 
+   & \bfseries\scshape Small Caps \\
+\hline
+\end{tabular}\end{center}
+
+}
+\medskip
+
+Note that is the current shape is italic, \cn{bfseries} would
+select bold italic, and if text is currently upright,
+\cn{bfseries} would select upright bold.  Note also that some
+family/series/shape combinations are not always available.
+This shouldn't create problems as suitable substitutions are made
+(and a warning message issued), but if you really want these
+fonts, it is reasonably straightforward to get Metafont to make them
+for you.
+
+These commands are typically used in contexts delimited with braces
+in the usual way.  If you only want a \textit{small} amount of text
+to be changed, you can use the commands:
+\begin{itemize}
+\item \verb|\textrm{Roman family}| \textrm{Roman family};
+\item \verb|\textsf{Sans serif family}| \textsf{Sans serif family};
+\item \verb|\texttt{Typewriter family}| \texttt{Typewriter family};
+\item \verb|\textmd{Medium series}| \textmd{Medium series};
+\item \verb|\textbf{Bold series}| \textbf{Bold series};
+\item \verb|\textup{Upright shape}| \textup{Upright shape};
+\item \verb|\textit{Italic shape}| \textit{Italic shape};
+\item \verb|\textsl{Slanted shape}| \textsl{Slanted shape};
+\item \verb|\textsc{Small Caps shape}| \textsc{Small Caps shape};
+\item \verb|\emph{Emphasized}| \emph{Emphasized};
+\end{itemize}
+the last of these chooses its shape (`up' or `it') depending on context.
+All of these commands will insert the appropriate extra space
+if a slanted shape butts into an upright one.
+
+To change fonts in maths mode you use the analogous commands
+\begin{itemize}
+\item \verb|\mathrm{Roman}|,
+\item \verb|\mathnormal{Normal}|,
+\item \verb|\mathcal{CALIGRAPHIC}|,
+\item \verb|\mathbf{Bold}|,
+\item \verb|\mathsf{Sans serif}|,
+\item \verb|\mathtt{Typewriter}|,
+\item \verb|\mathit{Italic}|.
+\end{itemize}
+
+\cn{mathbb} gives `blackboard bold' when the appropriate AMS
+symbols package loaded.  The AMS packages also provide
+cyrillic, gothic and script letters.
+
+Here's a test: 
+\[\begin{array}{ccc}
+\mathrm{Roman} & \mathnormal{Normal} & \mathcal{CALIGRAPHIC} \\
+\mathbf{Bold} & \mathsf{Sans\ serif} & \mathtt{Typewriter} \\
+\mathit{Italic} & \mathbb{N,Z,R,C} & \mathfrak{A,B,C,D}
+\end{array}\]
+
+\cn{mathnormal} is the usual font for algebraic equations, etc.,
+and the spacing between letters is designed for this.  If you want a
+word typed in italic, as in \( T_{\mathit{max}} \) use \cn{mathit}.
+(Compare this with \verb|T_{max}|, \( T_{max} \) which looks pretty
+horrible.
+
+There's a subtle but important point about changing fonts, often 
+missed by beginners (and also people who are not beginners) at
+\LaTeX, which is the so called \textit{italic correction}.
+Typesetters should add a little extra space after a 
+\begin{quote}
+{\sl slanted\/} letter
+\end{quote} 
+if the next letter is upright.  If this is not done
+the text looks too cramped, as in
+\begin{quote}
+{\sl slanted} letter.  
+\end{quote}
+The commands \verb|\textit|, \verb|\textsl|, and \verb|\emph| do 
+this automatically, but you have to add the correction by hand with 
+the command \verb|\/| when you use any of the other font-changing 
+commands, including \verb|\it| and \verb|\sl|.
+
+One final word on fonts: the commands \verb|\textrm|, \verb|\rm|
+and so on are defined by the \textit{document class} in terms
+of the more basic commands discussed here, so they might not work
+in the same way if you change from the \verb|article| to a publisher's
+special document class.  So you should probably use them rather
+than the basic commands, since that way major stylistic changes can be
+made with a single change.
+
+\section{User-defined commands in \LaTeX}
+
+\newcommand{\wake}{baba\-badalgharagh\-takam\-min\-%
+arron\-nkonn\-bronn\-tonn\-er\-ronn\-tuonn\-thunn\-%
+tro\-varr\-houn\-awnskawn\-too\-hoo\-hoor\-denen\-thur\-nuk}
+
+\begin{sloppypar}
+\LaTeX\ always included the factility to add new commands.
+For example, you could say
+\begin{verbatim} \newcommand{\wake}{baba\-badalgharagh\-takam\-min\-%
+arron\-nkonn\-bronn\-tonn\-er\-ronn\-tuonn\-thunn\-%
+tro\-varr\-houn\-awnskawn\-too\-hoo\-hoor\-denen\-thur\-nuk}
+\end{verbatim}
+in a document that makes a lot of use of the hundred-letter word 
+on the first page of Joyce's \textit{Finnegans Wake}, and then you
+can save yourself a lot of typing (as well as remembering where
+all the suitable places to hyphenate it are) by just saying \verb|\wake|
+every time you need this word as in
+\begin{quote}
+\verb|The fall (\wake!) of a once wallstrait oldparr\ldots|
+\end{quote}
+`The fall (\wake!) of a once wallstrait oldparr\ldots'
+\end{sloppypar}
+
+Note the use of the comment character (\%) to ensure that \LaTeX\
+doesn't see the end-of-line symbol and therefore doesn't break up this
+beautiful word into three.  (Unfortunately, \LaTeX\ does have to hyphenate 
+it somewhere though.)  Note also that new commands defined this way
+still suffer from the problem that any spaces following them will 
+be ignored.
+
+\newcommand{\lis}[2]{#2_{1},\ldots,#2_{#1}}
+\LaTeX\ commands may take arguments too. For example, in
+\begin{verbatim}
+\newcommand{\lis}[2]{#2_{1},\ldots,#2_{#1}}
+\end{verbatim}
+we define a command \verb|\lis| of two arguments (which will replace
+the \verb|#1| and \verb|#2| in the definition.  Thus
+\verb|consider \( \mathbf{x} = (\lis{n}{x}) \)| becomes
+`consider \( \mathbf{x} = (\lis{n}{x}) \).'
+
+\LaTeXe\ improves the \cn{newcommand} command of \LaTeX~2.09 
+by allowing you to define commands with an optional argument as well.
+
+\newcommand{\seq}[2][n]{#2_{1},\ldots,#2_{#1}}
+For example, in
+\begin{verbatim}
+\newcommand{\seq}[2][n]{#2_{1},\ldots,#2_{#1}}
+\end{verbatim}
+we define \cn{seq} with two arguments, the first being optional
+(default value `n').  This means
+\begin{verbatim}
+For some \(i \in \{ \seq{t} \} \) we have 
+\( f(i)=\seq[m]{\alpha} \)
+\end{verbatim}
+gives
+`For some \(i \in \{ \seq{t} \} \) we have \( f(i)=\seq[m]{\alpha} \)'.
+
+\newenvironment{qsi}[1]%
+{#1 wrote,\begin{quote}\begin{sloppypar}\it}%
+{\end{sloppypar}\end{quote}}
+\LaTeX\ also allows you to define environments, usually
+variations of existing ones.  So the definition
+\begin{verbatim}
+\newenvironment{qsi}[1]%
+{#1 wrote,\begin{quote}\begin{sloppypar}\it}%
+{\end{sloppypar}\end{quote}}
+\end{verbatim}
+Makes the following \LaTeX\ source
+\begin{verbatim}
+\begin{qsi}{Joyce}
+The fall (\wake!) of a once wallstrait oldparr\ldots
+\end{qsi}
+\end{verbatim}
+yield: \begin{qsi}{Joyce}
+The fall (\wake!) of a once wallstrait oldparr\ldots
+\end{qsi}
+
+\section{Packages}  
+
+The best feature of \LaTeXe\ is its ability to load
+and use packages from various sources in a smooth, uniform way.  
+Several are bundled with the
+new \LaTeX, including ones to print graphics, and one to vary 
+`theorem' environments. 
+The AMS packages now work well with \LaTeX\ and are highly recommended
+for tricky mathematical typesetting.  For example, if you require
+the AMS fonts, you are strongly advised to use \LaTeXe\ with the
+appropriate package.
+
+For further information on \LaTeXe\ and its packages, see
+`\LaTeXe\ for authors' and `AMS-\LaTeX\ Version 1.2 User's guide'
+which are on fourier and copies can be made available.
+
+\end{document}

@@ -1,0 +1,307 @@
+\documentclass[a4paper]{article}
+\usepackage{makeidx}
+
+\newcommand{\bs}{$\backslash$}
+\newcommand{\fn}[1]{{\tt #1}}
+\newcommand{\cn}[1]{{\tt \char"5C #1}}
+\newcommand{\BibTeX}{{\sc Bib}\TeX}
+\newtheorem{chall}{Challenge}[section] % chall is numbered within sections
+\newtheorem{thm}[chall]{Theorem}       % thm   is numbered as for challenge
+\newtheorem{quest}{Question}           % quest is numbered separately
+
+\title{Other cross-referencing tools for \LaTeX}
+\author{Richard Kaye\\School of Mathematics and Statistics\\ 
+The University of Birmingham\\Birmingham B15 2TT\\U.K.}% If you
+% change the document in any way, put your own name here instead of mine
+\date{12th August 1998}
+
+\makeindex
+
+\begin{document}
+
+\bibliographystyle{plain} % this is the recommended style.  Other possible 
+                          % ones are: unsrt (same, but entries are sorted by 
+                          % citation order) and abbrv (alphabetical order,
+                          % but journal names etc are abbreviated).
+                          % I don't recommend `alpha'.
+
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+
+This gives examples for using supplementary \TeX\ programs, \BibTeX\ 
+a bibliography database tool, and \fn{makeindex}, an index generator.
+
+\section{\BibTeX}
+
+\subsection{Why use \BibTeX?}
+
+There are several reasons.\index{bibtex@\BibTeX!advantages}
+
+\begin{itemize}
+\item Publishers\index{publishers} are very fussy about how references and
+      bibliographies are formatted, usually with good reason.\index{reason}
+      If you use \BibTeX\ correctly, you can make any required
+      stylistic changes automatically, and you just have to concentrate
+      on the content of your piece.
+\item \BibTeX\ automatically sorts the  references according to
+      whatever scheme you require.
+\item You may build a database of the papers you refer to often,
+      for use in your next paper or book.
+\end{itemize}
+In the long run, \BibTeX\ saves time, but there are 
+ disadvantages.\index{bibtex@\BibTeX!disadvantages}
+\begin{itemize}
+\item It takes more effort and requires more care to write the
+      input file for \BibTeX.
+\item Cross-references are not collated by \LaTeX\ until at least
+      the third pass on your main file.
+\end{itemize}
+
+\subsection{How to use \BibTeX}
+
+The general scheme is as follows:  you create a \LaTeX\ file as before,
+with the \cn{cite} commands, but leaving off the bibliographic data.
+You create one or more \BibTeX\ files (which have extension \fn{.bib})
+and instead of the 
+\begin{quote}
+\verb|\begin{thebibliography}...\end{thebibliography}|
+\end{quote}
+you use a
+\begin{quote}
+\verb|\bibliography{file1,file2}|
+\end{quote}
+command, which will instruct \BibTeX\ to read files \fn{file1.bib}
+and \fn{file2.bib} and put the bibliography at that point.
+You will also need a\index{bibliographystyle command}
+\begin{quote}
+\verb|\bibliographystyle{plain}|
+\end{quote}
+command just after the \verb|\begin{document}| command.
+
+The data is collected in four stages as follows.
+\begin{itemize}
+\item \LaTeX\ reads your main file and makes a note of all
+citations that are required.  (This data goes in the \fn{.aux} 
+file.)\index{aux file}
+\item \BibTeX\ reads the \fn{.aux} file and then reads any required
+\fn{.bib} files,\index{bib file} 
+and creates a \fn{.bbl}\index{bbl file} file containing
+all the references required in a format that \LaTeX\ can read.
+\item \LaTeX\ reads the \fn{.bbl} file on the second run, when it
+encounters the command `\cn{bibliography}'.  Note that this is usually
+at the end of the document.  The \fn{.bbl} file also contains
+the printable keys, and these are written to the \fn{.aux} file
+at this stage.
+\item \LaTeX\ is run again, and on this time will it be able
+to supply the appropriate keys in the final printed text.
+\end{itemize}
+
+Thus for a \LaTeX\ document \fn{foo.tex} using \BibTeX, 
+the following is the minimum
+you will need to do to resolve all cross-references.
+\begin{quote}
+\begin{tabular}{l}
+\tt latex foo \\
+\tt bibtex foo \\
+\tt latex foo \\
+\tt latex foo
+\end{tabular}
+\end{quote}
+
+In particularly bad situations,\index{bad situations} 
+a further run of \LaTeX\ is required.
+I have even come across \fn{.bib} files which cross-reference other
+citations, and here a further {\tt bibtex foo}, {\tt latex foo},
+{\tt latex foo} were required.
+
+\subsection{Examples of the use of \BibTeX}
+
+The \fn{.bib} file is set out in a different format to normal
+\LaTeX\ files.  An example is given in \fn{xampl.bib}.  This example
+is designed to show you almost all of \BibTeX's features.\index{poser}  
+In practice,
+you won't use them all, so here's a quick summary or two entries
+in \fn{xampl.bib}
+
+The first is the spurious paper by Aamport\index{Aamport, L. A.} 
+on a parallel
+document preparation system \cite{article-full}.
+\begin{verbatim}
+@ARTICLE{article-full,
+   author = {L[eslie] A. Aamport},
+   title = {The Gnats and Gnus Document Preparation System},
+   journal = {\mbox{G-Animal's} Journal},
+   year = 1986,
+   volume = 41,
+   number = 7,
+   pages = "73+",
+   month = jul,
+   note = "This is a full ARTICLE entry",
+}
+\end{verbatim}
+Here are some points to note.
+\begin{itemize}
+\item Names are usually written in full, `Leslie A. Aamport'.
+Writing them `Aamport, Leslie A.' is an alternative.  The square
+brackets are not really needed.  They were used here to indicate 
+that the author's name {\it really is} Leslie, but this doesn't
+appear in the article.  I don't recommend square brackets.
+Many \BibTeX\ style will abbreviate the first given name to 
+an initial anyway, and this is what is usually required.
+\item  The title of the article is written fully capitalized.
+Most \BibTeX\ styles will remove the capitals for articles (except for the
+very first word), but not for books.  This serves as a useful way of 
+distinguishing the two.  If a word in the article's title really should 
+be a capital, you put it in braces, so an article title might appear
+in a \fn{.bib} file as\index{brain size}
+\begin{verbatim}
+title={The Size of {E}instein's Brain}
+\end{verbatim}
+and the E will always remain a capital letter.
+\item Double quotes \verb|"..."| and braces \verb|{...}| are
+both possible ways to delimit fields. It doesn't matter what you
+use.  The commas between field are important though.
+\item Some entries do not require braces or double quotes.  These
+are entries which are numbers, or are a predefined string, such as
+`jul' here.
+\item Page numbers are usually wriiten as \verb|pages={23--34}|
+(but you can use \verb|-| instead of \verb|--|, \BibTeX\ automatically
+changes \verb|-| to \verb|--| here).
+\item Some of the information is not required, other parts are necessary.
+You will get an error message from \BibTeX\ if you miss out 
+something important.
+\item `\cn{mbox}' is the correct \LaTeX\ way of ensuring a word is not 
+hyphenated  and split across two lines.
+\end{itemize}
+
+Here's a `book' entry \cite{book-full}.\index{book entry}
+\begin{verbatim}
+@BOOK{book-full,
+   author = "Donald E. Knuth",
+   title = "Seminumerical Algorithms",
+   volume = 2,
+   series = "The Art of Computer Programming",
+   publisher = "Addison-Wesley",
+   address = "Reading, Massachusetts",
+   edition = "Second",
+   month = "10~" # jan,
+   year = "{\noopsort{1973c}}1981",
+   note = "This is a full BOOK entry",
+}
+\end{verbatim}
+Note \verb|#|, used to concatenate two strings together,
+and \verb|\noopsort| to fool \BibTeX\ into thinking
+that the book was actually published in 1973, so that it is
+ordered as such when the refenences are put into order.
+(But both these features are fairly `advanced'.)
+
+The other type of entry I use a lot is `incollection'.  Here 
+is\index{incollection}
+an example \cite{incollection-full}.
+\begin{verbatim}
+@INCOLLECTION{incollection-full,
+   author = "Daniel D. Lincoll",
+   title = "Semigroups of Recurrences",
+   editor = "David J. Lipcoll and D. H. Lawrie and A. H. Sameh",
+   booktitle = "High Speed Computer and Algorithm Organization",
+   number = 23,
+   series = "Fast Computers",
+   chapter = 3,
+   type = "Part",
+   pages = "179--183",
+   publisher = "Academic Press",
+   address = "New York",
+   edition = "Third",
+   month = sep,
+   year = 1977,
+   note = "This is a full INCOLLECTION entry",
+}
+\end{verbatim}
+Note the way you specify multiple authors, with an `and' between each.
+\BibTeX\ will make this into something more suitable.  (What it chooses
+depends on the style you are using.)
+
+\section{{\it Makeindex}, an index processor for \LaTeX}
+
+\subsection{When and why to use {\it Makeindex}}
+
+Making good indices is a real pain in the neck.  There is a lot of
+work collecting data, sorting it, and formatting it.  Each of these
+tasks involves a lot of repetious work, but each also requires human
+judgement too.  Use of a computer can reduce some of the labour,
+but unfortunately not a lot.
+
+Do not start to think about making an index until your document
+is complete or incredibly nearly so. 
+
+\subsection{How to use {\it Makeindex}}
+
+\begin{enumerate}
+\item Put the command `\verb|\usepackage{makeidx}|' in the preamble
+of your document, after the \cn{documentclass} command, 
+before \verb|\begin{document}|.\index{makeindex}
+\item Put `\cn{makeindex}' between the \verb|\usepackage{makeidx}| command
+and the command \verb|\begin{document}|.
+\item Put `\cn{printindex}' where you want the index to go---usually just
+before the \verb|\end{document}|.
+\end{enumerate}
+A \fn{.idx} file will be created, with all the index entries.
+This file will contain the index item and the page number
+for every \cn{index} command in the document.  For example,
+if your document says \verb|\index{number theory}| and this
+occurs in page~27, then the \fn{.idx} file will contain this
+information and an entry will be made in the index.
+
+The \fn{.idx} file is not read directly, but sorted and collated
+to produce a \fn{.ind} file which actually produces the index.
+To get this file the process is
+\begin{quote}\tt
+latex foo\\
+makeind[e]x foo\\
+latex foo
+\end{quote}
+Note, on some computers (such as MS-DOS machines) {\it Makeindex}
+is actually called \fn{makeindx} because these machines limit commands
+to eight letters.  On unix you type the full word.
+
+This document has various \cn{index} commands scattered around it.
+There are some variant of the commands, for example\index{makeindex!useof}
+\begin{quote}
+\verb|\index{makeindex!useof}|
+\end{quote}
+creates a sub-entry `use of' for the entry `makeindex' (you can have
+subsubentires too);\index{makeindx|see{makeindex}}
+\begin{quote}
+\verb+\index{makeindx|see{makeindex}}+
+\end{quote}
+creates a cross-reference; and\index{alpha@$\alpha$} in
+\begin{quote}
+\verb+\index{alpha@$\alpha$}+
+\end{quote}
+The index entry is given as $\alpha$ but placed in the
+appropriate order as if it had been spelt `alpha'.
+
+See the documentation for {\it Makeindex} for more details.
+
+\subsection{How to use {\it Makeindex} to create a glossary}
+
+The commands \cn{makeglossary} and \cn{glossary} behave rather like
+the commands \cn{makeindex} and \cn{index}, but work
+with a \fn{.glo} file instead.  You can use the program
+{\it Makeindex} to sort these entries if you like, but formatting
+is usually more difficult and dependent on the type of 
+application you have.  I'm not going to provide clues here,
+but if you are interested, please ask.  I did once use
+the \LaTeX\ `glossary' commands to produce an index of notation
+for a book once, and this was pretty successful.  (In this
+particular case I chose not to use {\it Makeindex} to sort
+the entries though.\index{zzzsleep})
+
+\bibliography{xampl}
+
+\printindex
+
+\end{document}
+

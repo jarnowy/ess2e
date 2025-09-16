@@ -1,0 +1,209 @@
+\documentclass[a4paper]{article}
+\usepackage{amsthm}
+
+\title{Using the \texttt{amsthm} package}
+\author{Richard Kaye}
+\date{12th August 1998}
+
+\newcommand\cn[1]{$\mathtt\backslash$\texttt{#1}}
+\newtheorem{prop}{Proposition}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem*{Zorn}{Zorn's Lemma}
+\theoremstyle{definition}
+\newtheorem{dfn}{Definition}
+\theoremstyle{remark}
+\newtheorem*{rmk}{Remark}
+\theoremstyle{remark}
+%\newtheorem*{proof}{Proof}
+
+\begin{document}
+
+\maketitle
+\section{Introduction}
+
+The ams\LaTeX\ \verb|amsthm| package extends \LaTeX's \verb|\newtheorem| command
+(see `Cross references in \LaTeX' and the file \verb|crossref.tex|), and is
+very useful.  The following is taken from the documentation.
+\begin{quotation}
+The \texttt{amsthm} package is loosely derived from \texttt{theorem.sty}
+    version 2.1c; it adds \cn{newtheorem*} for unnumbered environments
+    and changes the extensibility support for loading extra theorem
+    styles from external files: now it is done through the package
+    option mechanism.
+
+Here are some examples showing the kinds of theorem environment
+    declarations that are possible with the \verb|amsthm| package.
+\begin{verbatim}
+  \newtheorem{prop}{Proposition}
+  \newtheorem{thm}{Theorem}[section]
+  \newtheorem{lem}[thm]{Lemma}
+  \newtheorem*{Zorn}{Zorn's Lemma}
+  
+  \theoremstyle{definition}
+  \newtheorem{dfn}{Definition}
+
+  \theoremstyle{remark}
+  \newtheorem*{rmk}{Remark}
+\end{verbatim}
+
+The first four statements all define environments using the default
+     theorem style (`plain'), since there is no prefatory
+     \cn{theoremstyle} declaration. The first statement defines an
+     automatically numbered \texttt{prop} environment whose headings will
+     look like this: Proposition 1, Proposition 2, and so forth. The
+     second statement defines an environment \texttt{thm} with numbers
+     subordinate to section numbers, so the headings will look like
+     this: Theorem 1.1, Theorem 1.2, Theorem 1.3, \dots, (in section 2:)
+     Theorem 2.1, Theorem 2.2, and so forth. The third statement defines
+     a \texttt{lem} environment whose numbers will interleave in sequence
+     with the theorem numbers: Theorem 1.3, Lemma 1.4, Lemma 1.5,
+     Theorem 1.6, and so forth. The fourth statement defines a special
+     unnumbered lemma named `Zorn's Lemma'. The remaining two
+     \cn{newtheorem} statements have no special features except for the
+     \cn{theoremstyle} declarations that cause the \texttt{dfn} and
+     \texttt{rmk} environments to have some differences in appearance.
+
+There are three basic styles provided: The `plain' style produces
+     bold headings and italic body text; the `definition' style produces
+     bold headings and normal body text; the `remark' style produces
+     italic headings and normal body text.
+\end{quotation} 
+
+The examples here give the following.
+
+\begin{prop} This is a proposition.
+\end{prop}
+
+\begin{thm} This is a theorem.
+\end{thm}
+
+\begin{lem} This is a lemma.
+\end{lem}
+
+\begin{Zorn} This is Zorn's lemma.
+\end{Zorn}
+
+\begin{dfn} This is a definition.
+\end{dfn}
+
+\begin{rmk} This is a remark.
+\end{rmk}
+
+I suggest you use these commands as in the examples given, using whatever
+`theorem style' you prefer for theorems, lemmas, remarks, examples,
+definitions and so on.  (You don't \textit{have} to use the theorem 
+style `definition' for definitions only!)  Personally, I prefer to use 
+the `definition' style and `remark' style for everything, and not use 
+the `plain' style at all.
+
+The \texttt{amsthm} package also has an environment for proofs, 
+which you use as follows.
+\begin{verbatim}
+\begin{proof} We prove Lemma~5 by first considering the
+value of $x$. \ldots
+\end{proof}
+\end{verbatim}
+giving
+\begin{proof} We prove Lemma~5 by first considering the
+value of $x$. \ldots
+\end{proof}
+
+For more advanced \LaTeX ing, there are some more features added to
+the \verb|amsthm| package.  You most likely will never need them, but in 
+case you do, here is the documentation.
+
+\begin{quotation}
+     A \cn{swapnumbers} command allows theorem numbers to be swapped to
+     the front of the theorem headings. Putting \cn{swapnumbers} in your
+     document preamble will cause \emph{all following} \cn{newtheorem}
+     statements to produce number-first headings. (To provide maximum
+     control, \cn{swapnumbers} is designed so that it can be used more
+     than once; each time it is used, theorem numbers will be swapped to
+     the opposite side for all following \cn{newtheorem} statements. But
+     rarely will it need to be invoked more than once per document.)
+
+There is a \cn{newtheoremstyle} command provided to make the
+     creation of custom theoremstyles fairly easy.
+
+Usage:
+\begin{verbatim}
+                    #1
+  \newtheoremstyle{NAME}%
+      #2          #3          #4
+    {ABOVESPACE}{BELOWSPACE}{BODYFONT}%
+      #5      #6        #7         #8
+    {INDENT}{HEADFONT}{HEADPUNCT}{HEADSPACE}%
+      #9
+    {CUSTOM-HEAD-SPEC}
+\end{verbatim}
+     Leaving the `indent' argument empty is equivalent to entering
+     \verb|0pt|. The `headpunct' and `headspace' arguments are for the
+     punctuation and horizontal space between the theorem head and the
+     following text. There are two special values that may be used for
+     `headspace': a single space means that a normal interword space
+     should be used; ``\cn{newline}'' means that there should be a line
+     break after the head instead of horizontal space. The
+     `custom-head-spec' argument follows a special convention: it is
+     interpreted as the replacement text for an internal three-argument
+     function \cn{thmhead}, i.e., as if you were defining
+\begin{verbatim}
+  \renewcommand{\thmhead}[3]{...#1...#2...#3...}
+\end{verbatim}
+     but omitting the initial \verb|\renewcommand{\thmhead}[3]|. The three
+     arguments that will be supplied to \cn{thmhead} are the name,
+     number, and optional note components. Within the replacement text
+     you can (and normally will want to) use other special functions
+     \cn{thmname}, \cn{thmnumber}, and \cn{thmnote}. These will print
+     their argument if and only if the corresponding argument of
+     \cn{thmhead} is nonempty. For example
+\begin{verbatim}
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}
+\end{verbatim}
+     This would cause the theorem note \#3 to be printed with a
+     preceding space and enclosing parentheses, if it is present, and if
+     it is absent, the space and parentheses will be omitted because
+     they are inside the argument of \cn{thmnote}.
+
+Finally, if you have an extra bit of arbitrary code that you want
+     to slip in somewhere, the best place to do it is in the `body font'
+     argument.
+
+The \cn{newtheoremstyle} command is designed to provide, through a
+     relatively simple interface, control over the style aspects that
+     are most commonly changed. Clearly it cannot serve for all possible
+     theorem styles. Therefore there is a second interface provided to
+     allow arbitrary theorem styles by reading suitable definitions from
+     a separate file whose name ends with \texttt{.thm}. If the desired
+     style is far from any of the basic styles provided by the
+     \texttt{amsthm} package, writing the definitions may require some
+     expertise in \LaTeX's macro language.
+
+Suppose that you wanted to make a theorem style `exercise' for
+     exercises. Create a file called \texttt{exercise.thm} and in it define
+     a command \texttt{th@exercise} following the form of the commands
+     \texttt{th@plain}, \texttt{th@definition}, \texttt{th@remark} given below. Then
+     to use the new style, write
+\begin{verbatim}
+  \usepackage[exercise]{amsthm}
+  ...
+  \theoremstyle{exercise}
+\end{verbatim}
+     Similarly, it's possible to place a group of related
+     \cn{newtheoremstyle} statements in a \texttt{.thm} file, let's say
+     \texttt{stygroup.thm}, so that they could be loaded on demand in
+     various documents by
+\begin{verbatim}
+  \usepackage[stygroup]{amsthm}
+\end{verbatim}
+
+This strategy fails if you want to load a \texttt{.thm} file in a
+     document preamble and the \texttt{amsthm} package has already been
+     loaded in the documentclass (e.g., \texttt{amsart}). Then you need to
+     use a statement such as
+\begin{verbatim}
+  \PassOptionsToPackage{stygroup}{amsthm}
+\end{verbatim}
+     \emph{before} the \cn{documentclass} command.
+\end{quotation}
+\end{document}

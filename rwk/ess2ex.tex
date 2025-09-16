@@ -1,0 +1,112 @@
+% Essential LaTeX 2e - Jon Warbrick 02/88, Richard Kaye 10/95, 5/97
+
+% Modification of `Essential LaTeX' by Jon Warbrick, modification
+% made by Richard Kaye to run under LaTeX2e in native mode,
+% with some deletions, simplifications and additions.
+
+\documentclass[11pt,a4paper,notitlepage]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{texilikechaps,newclude}
+
+% el2emath
+
+% AmsTeX logo
+\newcommand{\AmsTeX}{{$\cal A$}\kern-.1667em\lower.5ex\hbox
+{$\cal M$}\kern-.125em{$\cal S$}-\TeX}
+\newcommand{\AmsLaTeX}{{$\cal A$}\kern-.1667em\lower.5ex\hbox
+{$\cal M$}\kern-.125em{$\cal S$}-\LaTeX}
+%
+
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+% 
+\usepackage{docmute}
+
+% crossref
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{chall}[thm]{Challenge}
+
+% extraref
+
+\usepackage{makeidx}
+\newcommand{\BibTeX}{{\sc Bib}\TeX}
+
+% el2emore
+
+% \newcommand{\fn}[1]{{\tt #1}}
+\newcommand{\cn}[1]{{\tt \char"5C #1}}
+
+% counters used for the sample file example
+
+\newcounter{savesection}
+\newcounter{savesubsection}
+
+% commands to do 'LaTeX Manual-like' examples
+
+\newlength{\egwidth}\setlength{\egwidth}{0.42\textwidth}
+
+\newenvironment{eg}%
+{\begin{list}{}{\setlength{\leftmargin}{0.05\textwidth}%
+\setlength{\rightmargin}{\leftmargin}}\item[]\footnotesize}%
+{\end{list}}
+
+\newenvironment{egbox}%
+{\begin{minipage}[t]{\egwidth}}%
+{\end{minipage}}
+
+\newcommand{\egstart}{\begin{eg}\begin{egbox}}
+\newcommand{\egmid}{\end{egbox}\hfill\begin{egbox}}
+\newcommand{\egend}{\end{egbox}\end{eg}}
+
+% one or two other commands
+
+\newcommand{\fn}[1]{\hbox{\tt #1}}
+\newcommand{\llo}[1]{(see line #1)}
+\newcommand{\lls}[1]{(see lines #1)}
+\newcommand{\bs}{$\backslash$}
+
+\title{Essential \LaTeXe++}
+\author{Jon Warbrick, Richard Kaye, David Carlisle}
+\date{12th August 1998}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    This short report contains three documents as source: Jon Warwick's "Essential \LaTeX", Richard Kaye's "Cross References in \LaTeX", and David Carlisle's "Essential Mathematical \LaTeX". Only the first one has been slightly tweaked to be bundled with the others via the \LaTeX\ packages \verb|docmute| and \verb|newclude|.
+\end{abstract}
+% \thispagestyle{empty}
+\tableofcontents
+% \thispagestyle{empty}
+\listoftables
+% \listoffigures
+
+\let\fulltableofcontents\tableofcontents
+\let\tableofcontents\relax
+\let\fulllistoftables\listoftables
+\let\listoftables\relax
+\let\listoffigures\relax
+
+% \setcounter{page}{0}
+
+\section*{Essential \LaTeX}
+\addcontentsline{toc}{section}{Essential \LaTeX}
+\include*{el2e}
+\section*{Essential Cross Referencing}
+\addcontentsline{toc}{section}{Essential Cross Referencing}
+\include*{crossref}
+\section*{Essential Mathematical \LaTeX}
+\addcontentsline{toc}{section}{Essential Mathematical \LaTeX}
+\include*{el2emath}
+% \include{extraref}
+% \include{el2emore}
+
+% \fulllistoftables
+% \AtDocumentEnd {\fulltableofcontents}
+
+\end{document}
